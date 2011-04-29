@@ -175,7 +175,7 @@ public class UtilsTest extends SocksoTestCase {
  
     public void testu2e() {
         
-        assertEquals( "foo &#8730;&#235;", Utils.u2e("foo Ñ") );
+        assertEquals( "foo &#209;", Utils.u2e("foo Ñ") );
         
     }
     
