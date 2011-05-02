@@ -10,6 +10,7 @@ import com.pugh.sockso.music.CollectionManager;
 import com.pugh.sockso.resources.Resources;
 
 import com.pugh.sockso.web.action.AdminAction;
+import com.pugh.sockso.web.action.Api;
 import com.pugh.sockso.web.action.Downloader;
 import com.pugh.sockso.web.action.Feeder;
 import com.pugh.sockso.web.action.FileServer;
@@ -132,6 +133,8 @@ public class Dispatcher {
         
         else if ( command.equals("nat") )
             action = new Nater();
+        else if ( command.equals("api") )
+        	action = new Api(cm, cache);
         
         if ( action != null ) {
             action.setDatabase( db );
