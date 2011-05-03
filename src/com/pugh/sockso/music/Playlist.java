@@ -94,33 +94,24 @@ public class Playlist extends MusicItem {
     	final Vector<Playlist> lists = new Vector<Playlist>();
         PreparedStatement st = null;
         ResultSet rs = null;
-        
+
         if ( user == null && !includeSiteLists)
-        	throw new BadRequestException("User is not logged in and site playlists are not selected...");
-    	
-    	String sql = " select p.id as playlistId, p.name as playlistName, " +
-    	                    " p.user_id as playlistUser, count(t.track_id) as trackCount " + 
-    	                " from playlists p, playlist_tracks t where t.playlist_id = p.id and ( ";
-    	if ( user != null )
-    		sql +=   " p.user_id = " + user.getId();
-    	if ( includeSiteLists )
-    		if ( user != null )
-    			sql += " or ";
-    		sql +=   " p.user_id is null ";
-    		
-    	sql += " ) group by  playlistId, playlistName, playlistUser ";
-    	
-    	if ( limit > 0 )
-    		sql +=   " limit " + limit + " ";
-    	else
-    		sql +=   " limit ALL ";
-    	
-    	if ( offset > 0 )
-    		sql +=   " offset " + offset + " ";
+            throw new BadRequestException("User is not logged in and site playlists are not selected...");
+
+        String sql = " select p.id as playlistId, p.name as playlistName, " +
+                     "        p.user_id as playlistUser, count(t.track_id) as trackCount " +
+                     " from playlists p, playlist_tracks t " +
+                     " where t.playlist_id = p.id and ( p.user_id = ? or p.user_id is null ) " +
+                     " group by playlistId, playlistName, playlistUser " +
+                     " limit ? offset ? ";
     	
     	try {
     		
             st = db.prepare( sql );
+            st.setInt( 1, user.getId() );
+            st.setInt( 2, limit );
+            st.setInt( 3, offset );
+
             rs = st.executeQuery();
             
             while ( rs.next() ) {
