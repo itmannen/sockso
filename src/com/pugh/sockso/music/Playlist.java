@@ -9,6 +9,14 @@
 
 package com.pugh.sockso.music;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+import com.pugh.sockso.Utils;
+import com.pugh.sockso.db.Database;
+import com.pugh.sockso.web.BadRequestException;
 import com.pugh.sockso.web.User;
 
 public class Playlist extends MusicItem {
@@ -68,4 +76,78 @@ public class Playlist extends MusicItem {
         
     }
     
+    /**
+     *  returns a list of playlists for the user with given
+     *  limit and offset for the results.
+     *  
+     *  @param db database object to use
+     *  @param user user to fetch playlists
+     *  @param limit max number of elements in the result
+     *  @param offset offset for pagination
+     *  @param includeSiteLists whether to include site lists in the results.
+     *  @throws BadRequestException 
+     *  
+     */
+    
+    public static Vector<Playlist> getPlaylists( final Database db, final User user, int limit, int offset, boolean includeSiteLists ) throws SQLException, BadRequestException {
+    	
+    	final Vector<Playlist> lists = new Vector<Playlist>();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        
+        if ( user == null && !includeSiteLists)
+        	throw new BadRequestException("User is not logged in and site playlists are not selected...");
+    	
+    	String sql = " select p.id as playlistId, p.name as playlistName, " +
+    	                    " p.user_id as playlistUser, count(t.track_id) as trackCount " + 
+    	                " from playlists p, playlist_tracks t where t.playlist_id = p.id and ( ";
+    	if ( user != null )
+    		sql +=   " p.user_id = " + user.getId();
+    	if ( includeSiteLists )
+    		if ( user != null )
+    			sql += " or ";
+    		sql +=   " p.user_id is null ";
+    		
+    	sql += " ) group by  playlistId, playlistName, playlistUser ";
+    	
+    	if ( limit > 0 )
+    		sql +=   " limit " + limit + " ";
+    	else
+    		sql +=   " limit ALL ";
+    	
+    	if ( offset > 0 )
+    		sql +=   " offset " + offset + " ";
+    	
+    	try {
+    		
+            st = db.prepare( sql );
+            rs = st.executeQuery();
+            
+            while ( rs.next() ) {
+            	lists.add(createFromResultSet(rs));
+            }
+            
+    	} catch (SQLException e) {
+    		System.out.println( e.getMessage() );
+    		e.printStackTrace();
+    	} finally {
+            Utils.close( rs );
+            Utils.close( st );
+    	}
+    	
+    	return lists;
+    	
+    }
+    
+    /**
+     *  creates a new playlist from a result set row
+     * 
+     *  @param rs the result set
+     *  @return Playlist
+     *  @throws SQLException 
+     * 
+     */
+    public static Playlist createFromResultSet(final ResultSet rs) throws SQLException {
+    	return new Playlist(rs.getInt( "playlistId" ), rs.getString( "playlistName" ), rs.getInt( "trackCount" ) );
+    }
 }
