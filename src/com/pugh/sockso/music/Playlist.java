@@ -108,7 +108,7 @@ public class Playlist extends MusicItem {
     	try {
     		
             st = db.prepare( sql );
-            st.setInt( 1, (user == null) ? 0 : user.getId() );
+            st.setInt( 1, (user == null) ? -1 : user.getId() );
             st.setInt( 2, limit );
             st.setInt( 3, offset );
 
