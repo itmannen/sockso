@@ -37,6 +37,15 @@ abstract public class ApiAction extends WebAction {
 
     public int getLimit() {
 
+        try {
+
+            if ( getRequest().hasArgument( "limit" ) ) {
+                int limit = Integer.parseInt( getRequest().getArgument( "limit" ) );
+                return limit;
+            }
+
+        } catch (NumberFormatException ignored) {}
+
         return 100;
 
     }
@@ -49,6 +58,15 @@ abstract public class ApiAction extends WebAction {
      */
 
     public int getOffset() {
+
+        try {
+
+            if ( getRequest().hasArgument( "offset" ) ) {
+                int offset = Integer.parseInt( getRequest().getArgument( "offset" ) );
+                return offset;
+            }
+
+        } catch (NumberFormatException ignored) {}
 
         return 0;
 
