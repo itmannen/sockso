@@ -5,9 +5,10 @@ import com.pugh.sockso.ObjectCache;
 import com.pugh.sockso.music.CollectionManager;
 import com.pugh.sockso.web.BadRequestException;
 import com.pugh.sockso.web.action.api.ApiAction;
+import com.pugh.sockso.web.action.api.PlaylistsAction;
 import com.pugh.sockso.web.action.api.RootAction;
 
-import java.util.Vector;
+import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
@@ -27,14 +28,19 @@ public class Api extends WebAction {
 
     private final ObjectCache cache;
 
-    private final Vector<ApiAction> apiActions;
+    private static final Hashtable<String, ApiAction> apiActions;
+
+    static {
+
+        apiActions = new Hashtable<String, ApiAction>();
+        initApiActions();
+
+    }
 
     public Api( final CollectionManager cm, final ObjectCache cache ) {
 
         this.cm = cm;
         this.cache = cache;
-
-        apiActions = new Vector<ApiAction>();
 
     }
 
@@ -50,9 +56,13 @@ public class Api extends WebAction {
     @Override
     public void handleRequest() throws BadRequestException, IOException, SQLException {
 
+        int paramCount = getRequest().getPlayParams(false).length;
         initApiActions();
 
-        for ( ApiAction action : apiActions ) {
+        String command = (paramCount == 0) ? "" : getRequest().getPlayParams(false)[0];
+
+        ApiAction action = apiActions.get(command);
+        if ( action != null ) {
 
             action.init( getRequest(), getResponse(), getUser(), getLocale() );
             action.setDatabase( getDatabase() );
@@ -72,9 +82,14 @@ public class Api extends WebAction {
      *  Init apiActions with all the actions we can process
      *
      */
-    protected void initApiActions() {
+    protected static void initApiActions() {
 
-        apiActions.add( new RootAction() );
+        ApiAction[] actions = { new RootAction(),
+                                new PlaylistsAction() };
+
+        for (ApiAction action: actions) {
+            apiActions.put(action.getCommandName(), action);
+        }
 
     }
 

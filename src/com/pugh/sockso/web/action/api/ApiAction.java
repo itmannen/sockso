@@ -11,6 +11,15 @@ import java.sql.SQLException;
 abstract public class ApiAction extends WebAction {
 
     /**
+     *  Returns the name of the api command to handle.
+     *
+     *  @return
+     *
+     */
+
+    public abstract String getCommandName();
+
+    /**
      *  Returns true if the action handled the API request, false otherwise
      *
      *  @return

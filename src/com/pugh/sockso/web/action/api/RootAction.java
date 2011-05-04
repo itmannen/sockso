@@ -27,4 +27,9 @@ public class RootAction extends ApiAction {
         
     }
 
+    @Override
+    public String getCommandName() {
+        return "";
+    }
+
 }

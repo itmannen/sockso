@@ -34,5 +34,12 @@ public class PlaylistsAction extends ApiAction {
         
     }
 
+    @Override
+    public String getCommandName() {
+
+        return "playlists";
+
+    }
+
 
 }
