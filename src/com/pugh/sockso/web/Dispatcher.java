@@ -15,6 +15,7 @@ import com.pugh.sockso.web.action.Feeder;
 import com.pugh.sockso.web.action.FileServer;
 import com.pugh.sockso.web.action.Homer;
 import com.pugh.sockso.web.action.Jsoner;
+import com.pugh.sockso.web.action.Mobile;
 import com.pugh.sockso.web.action.Nater;
 import com.pugh.sockso.web.action.Player;
 import com.pugh.sockso.web.action.Sharer;
@@ -104,6 +105,10 @@ public class Dispatcher {
         
         else if ( command.equals("json") )
             action = new Jsoner( cm, cache );
+        
+        else if ( command.equals("mobile") ) {
+            action = new Mobile();
+        }
         
         else if ( command.equals("user") ) {
             final Userer u = new Userer();

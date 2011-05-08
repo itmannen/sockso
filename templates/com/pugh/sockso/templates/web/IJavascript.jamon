@@ -18,13 +18,13 @@
     <%java>
         final String[] jsFiles = new String[] {
 
-            "jquery", "jquery.corner", "persistjs",
+            "jquery", "jquery.corner", "jquery.mobile", "persistjs",
 
             "sockso", "sockso.Base", "sockso.Hashtable", "sockso.Session",
             "sockso.Locale", "sockso.Properties", "sockso.Player", "sockso.Playlist",
             "sockso.SearchBox", "sockso.UploadForm", "sockso.User", "sockso.RelatedArtists",
             "sockso.Sharer", "sockso.ImageFlow", "sockso.FolderBrowsing", "sockso.AdminConsole",
-            "sockso.Page", "sockso.Ajaxer",
+            "sockso.Page", "sockso.Ajaxer", "sockso.Mobile",
 
             "init"
 
