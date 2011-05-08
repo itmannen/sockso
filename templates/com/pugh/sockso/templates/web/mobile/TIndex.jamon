@@ -1,0 +1,75 @@
+
+<%import>
+    com.pugh.sockso.Properties;
+    com.pugh.sockso.resources.Locale;
+</%import>
+
+<%args>
+    Properties properties = null;
+    Locale locale = null;
+</%args>
+
+<html>
+<head>
+<title><% locale.getString("www.admin.title.console") %></title>
+
+<link rel="shortcut icon" href="<% properties.getUrl("/<skin>/images/favicon.ico") #n %>" type="image/x-icon">
+
+<link rel="stylesheet" href="<% properties.getUrl("/file/mobile/jquery.mobile.css") %>" />
+<link rel="stylesheet" href="<% properties.getUrl("/file/mobile/mobile.css") %>" />
+
+<script src="<% properties.getUrl("/file/js/jquery.js") %>"></script>
+<script src="<% properties.getUrl("/file/mobile/jquery.mobile.js") %>"></script>
+<script src="<% properties.getUrl("/file/mobile/jquery.jplayer.js") %>"></script>
+<script src="<% properties.getUrl("/file/mobile/mobile.js") %>"></script>
+
+</head>
+
+<body>
+
+<!--
+    Homepage
+-->
+
+<div data-role="page" id="home">
+    <div data-role="header">
+        <h1>Sockso</h1>
+    </div>
+    <div data-role="content"></div>
+    <div data-role="footer">
+        <& INavBar &>
+    </div>    
+</div>
+
+<div data-role="page" id="search">
+    <div data-role="header">
+        <h1>Search</h1>
+    </div>
+    <div data-role="content"></div>
+    <div data-role="footer">
+        <& INavBar &>
+    </div>
+</div>
+
+<div data-role="page" id="playlist">
+    <div data-role="header">
+        <h1>Playlist</h1>
+    </div>
+    <div data-role="content"></div>
+    <div data-role="footer">
+        <& INavBar &>
+    </div>
+</div>
+  
+<div data-role="page" id="playing">
+    <div data-role="header">
+        <h1>Now Playing</h1>
+    </div>
+    <div data-role="content"></div>
+    <div data-role="footer">
+        <& INavBar &>
+    </div>
+</div>
+  
+</body>
+</html>

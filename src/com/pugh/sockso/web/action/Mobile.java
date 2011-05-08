@@ -1,7 +1,7 @@
 
 package com.pugh.sockso.web.action;
 
-import com.pugh.sockso.templates.web.TMobile;
+import com.pugh.sockso.templates.web.mobile.TIndex;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ public class Mobile extends WebAction {
      
     public void handleRequest() throws IOException {
     
-        final TMobile tpl = new TMobile();
+        final TIndex tpl = new TIndex();
         tpl.setProperties( getProperties() );
         tpl.setLocale( getLocale() );
         
