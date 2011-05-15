@@ -1,0 +1,26 @@
+
+.clear-both {
+    clear: both;
+}
+
+#playing h2 {
+}
+
+#playing img,
+#playing .info,
+#playing .info label,
+#playing .info span {
+    display: block;
+    float: left;
+}
+
+#playing .info label {
+    clear: left;
+    font-weight: bold;
+    width: 65px;
+    padding: 0 0 0 8px;
+    margin: 0 0 4px 0;
+}
+
+#playing .info span {
+}

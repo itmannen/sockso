@@ -2,8 +2,8 @@
  <div data-role="navbar">
     <ul>
         <li class="search"><a href="#search">Search</a></li>
-        <li class="playlist"><a href="#home">Home</a></li>
+        <li class="home"><a href="#home">Home</a></li>
         <li class="playlist"><a href="#playlist">Playlist</a></li>
-        <li class="playlist"><a href="#playing">Playing</a></li>
+        <li class="playing"><a href="#playing">Playing</a></li>
     </ul>
 </div>

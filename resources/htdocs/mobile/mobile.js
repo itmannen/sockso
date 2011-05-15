@@ -1,4 +1,9 @@
 
+function MusicItem( id, name ) {
+    this.id = id;
+    this.name = name;
+};
+
 Function.prototype.bind = function( scope ) {
     var self = this;
     return function() {
@@ -63,13 +68,70 @@ sockso.mobile.Player.prototype = {
 
 sockso.mobile.page.Search = function() {
 
+    this.searchTimeout = null;
     this.container = $( '#search' );
+    this.results = $( '<div></div>' );
+    this.search = $( '<input type="search"></input>' );
+
 
 };
 
 sockso.mobile.page.Search.prototype = {
 
-    init: function() {}
+    init: function() {
+
+        this.container.live(
+            'pagebeforecreate',
+            this.onBeforeCreate.bind( this )
+        );
+
+    },
+
+    onBeforeCreate: function() {
+
+        var form = $( '<div></div>' )
+                      .attr( 'data-role', 'fieldcontain' )
+                      .append( this.search );
+
+        var searchButton = $( '<a></a>' )
+                      .attr( 'data-role', 'button' )
+                      .html( 'Go')
+                      .click( this.onSearchClick.bind(this) );
+
+        var searchContainer = $( '<div></div>' )
+                      .attr( 'data-inline', 'true' )
+                      .append( form )
+                      .append( searchButton );
+
+        var container = $( '<span></span>' )
+            //.append( form )
+            .append( searchContainer )
+            .append( this.results );
+
+        $( '#search div[data-role="content"]' )
+            .empty()
+            .append( container )
+            .page();
+
+    },
+
+    onSearchClick: function() {
+
+        var query = 'eminem';
+
+        $.ajax({
+            url: '/json/search/' + encodeURIComponent(query),
+            dataType: 'json',
+            success: this.onSearchComplete.bind( this )
+        });
+
+    },
+
+    onSearchComplete: function( json ) {
+    
+        console.log( 'Back!' );
+    
+    }
 
 };
 
@@ -125,10 +187,12 @@ sockso.mobile.page.Playing.prototype = {
         
             id: 1648,
             name: 'Electric Guitar',
+            plays: 23,
             
             album: {
                 id: '1648',
-                name: 'The Album'                
+                name: 'The Album',
+                year: 2004
             },
             
             artist: {
@@ -150,21 +214,44 @@ sockso.mobile.page.Playing.prototype = {
     },
     
     displayTrack: function( track ) {
-    
+
+
         var title = $( '<h2></h2>' )
-                            .html( track.name+ ' (' +track.artist.name+ ')' );
+                            .html( track.name );
                             
         var cover = $( '<img></img>' )
                             .attr( 'src', '/file/cover/al' +track.album.id );
+
+        var info = $( '<div></div>' )
+                            .addClass( 'info' )
+                            .append( this.getInfo('Artist',track.artist.name) )
+                            .append( this.getInfo('Album',track.album.name) )
+                            .append( this.getInfo('Plays',track.plays) );
     
         var display = $( '<div></div>' )
                             .append( title )
-                            .append( cover );
+                            .append( cover )
+                            .append( info )
+                            .append( $('<div></div>').addClass('clear-both') );
 
         $( '#playing div[data-role="content"]' )
             .empty()
             .append( display );
     
+    },
+
+    getInfo: function( label, value ) {
+
+        var labelElement = $( '<label></label>' )
+            .html( label + ':' );
+
+        var valueElement = $( '<span></span>' )
+            .html( value );
+
+        return $( '<div></div>' )
+            .append( labelElement )
+            .append( valueElement );
+
     }
 
 };
